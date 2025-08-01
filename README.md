@@ -1,5 +1,5 @@
 
-# CellExch: A graph attention network-based method for analysing ligand-receptor interaction-mediated cell-cell communication
+# CellExch: A Multimodal Feature-Based Framework for End-to-End Prediction of LRI-Mediated Cell–Cell Communication
 =========================================================================================
 
 

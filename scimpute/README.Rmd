@@ -1,0 +1,73 @@
+---
+title: "scImpute: accurate and robust  imputation of scRNA-seq data"
+author: "Wei Vivian Li, Jingyi Jessica Li"
+
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+## Latest News
+
+> 2019/08/20:
+
+-  Since the development of scImpute, new imputation methods have been proposed for scRNA-seq data. These methods have different model assumptions and diverse performances on different datasets. It contributes to both method development and bioinformatic applications to discuss and compare existing imputation methods. However, we realize several issues in existing evaluation and comparison of imputation methods and discuss these issue in our commentary, which is available at [arxiv]( https://arxiv.org/abs/1908.07084).
+
+> 2018/08/15:
+
+-   Version 0.0.9 is released!
+-   More robust implementation of dimension reduction.
+-   Faster calculation of cell similarity.
+
+## Introduction
+`scImpute` is developed to accurately and robustly impute the dropout values in scRNA-seq data. `scImpute` can be applied to raw read count matrix before the users perform downstream analyses such as
+
+- dimension reduction of scRNA-seq data
+- normalization of scRNA-seq data
+- clustering of cell populations
+- differential gene expression analysis
+- time-series analysis of gene expression dynamics
+
+The users can refer to our paper [An accurate and robust imputation method scImpute for single-cell RNA-seq data](https://www.nature.com/articles/s41467-018-03405-7) for a detailed description of the modeling and applications.
+
+Any suggestions on the package are welcome! For technical problems, please report to [Issues](https://github.com/Vivianstats/scImpute/issues). For suggestions and comments on the method, please contact Wei (<liw@ucla.edu>) or Dr. Jessica Li (<jli@stat.ucla.edu>). 
+
+## Installation
+The package is not on CRAN yet. For installation please use the following codes in `R`
+```{r eval = FALSE}
+install.packages("devtools")
+library(devtools)
+
+install_github("Vivianstats/scImpute")
+```
+
+## Quick start
+
+`scImpute` can be easily incorporated into existing pipeline of scRNA-seq analysis.
+Its only input is the raw count matrix with rows representing genes and columns representing cells. It will output an imputed count matrix with the same dimension.
+In the simplest case, the imputation task can be done with one single function `scimpute`:
+```{r eval = FALSE}
+scimpute(# full path to raw count matrix
+         count_path = system.file("extdata", "raw_count.csv", package = "scImpute"), 
+         infile = "csv",           # format of input file
+         outfile = "csv",          # format of output file
+         out_dir = "./",           # full path to output directory
+         labeled = FALSE,          # cell type labels not available
+         drop_thre = 0.5,          # threshold set on dropout probability
+         Kcluster = 2,             # 2 cell subpopulations
+         ncores = 10)              # number of cores used in parallel computation
+```
+This function returns the column indices of outlier cells, and creates a new file `scimpute_count.csv` in `out_dir` to store the imputed count matrix. Please note that we recommend applying scImpute on the whole-genome count matrix. A filtering step on genes is acceptable but most genes should be present to ensure robust identification of dropouts. 
+
+For detailed usage, please refer to the package [manual](https://github.com/Vivianstats/scImpute/blob/master/inst/docs/) or [vignette](https://github.com/Vivianstats/scImpute/blob/master/vignettes/scImpute-vignette.Rmd).
+
+
